@@ -31,24 +31,26 @@ class Form extends React.Component {
         classes : classes
      })
   };
+
+
   render() {
     const classes = this.state;
     return (
       
         <FormControl className={classes.formControl}>
         <InputLabel id="demo-simple-select-label">Candidate</InputLabel>
-        <Select
+        <Select onChange={(e) =>  this.props.candidateChange(e)}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           >
           {
             this.props.candidates.map((candidate) => {
-                return <MenuItem value={candidate.id}>{candidate.name}</MenuItem>
+                return <MenuItem  key={candidate.id } value={candidate.name}>{candidate.name}</MenuItem>
             })
           }
         </Select>
           <br/>
-        <Button className={classes.root} variant="contained" color="primary">Vote</Button>
+        <Button onClick = {this.props.castVote } className={classes.root} variant="contained" color="primary">Vote</Button>
         </FormControl> 
           
     )
