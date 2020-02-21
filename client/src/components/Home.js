@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import VotingApp from './Voting';
-import * as constants from '../constants/AppConstants';
 
 
 class Home extends Component {

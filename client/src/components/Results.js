@@ -1,15 +1,13 @@
 import React from 'react'
-import Web3 from 'web3';
 import * as constants from '../constants/AppConstants';
 import ElectionContract from '../contracts/Election.json';
-import * as  constant from '../constants/AppConstants';
 
 class Results extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-       web3: null, accounts: null, contract: null,
+       web3: null, contract: null,
        candidates: []
     }
     this.loadContract = this.loadContract.bind(this);
@@ -20,8 +18,6 @@ class Results extends React.Component {
           // Get network provider and web3 instance.
           const web3 = constants.WEB3;
     
-          // Use web3 to get the user's accounts.
-          const accounts = await web3.eth.getAccounts();
           // Get the contract instance.
           const networkId = await web3.eth.net.getId();
           const deployedNetwork = ElectionContract.networks[networkId];
@@ -33,7 +29,7 @@ class Results extends React.Component {
           
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
-          this.setState({ web3, accounts, contract: electionInstance,account: accounts[0] });
+          this.setState({ web3, contract: electionInstance });
           this.loadContract();
         } catch (error) {
           // Catch any errors for any of the above operations.
@@ -46,7 +42,7 @@ class Results extends React.Component {
 
 
   loadContract = async() => {
-    const { accounts, contract } = this.state;
+    const { contract } = this.state;
     console.log("Loading Election Contract");
     //this.watchEvents();
     contract.methods.getCandidates().call().then((result,err) => {
@@ -65,8 +61,6 @@ class Results extends React.Component {
               });
             }
             this.setState({ candidates: candidates })
-            console.log("Candiates Info Loaded");
-            console.log(candidates);
             this.setState({loading : false});
         }
     }).catch(err => {

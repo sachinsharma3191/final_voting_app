@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import Router from './routing/Router';
 
 import "./App.css";

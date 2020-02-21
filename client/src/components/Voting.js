@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import ReactDOM from 'react-dom';
 import Web3 from 'web3';
 import * as constants from '../constants/AppConstants';
-import contract from 'truffle-contract';
 import ElectionContract from '../contracts/Election.json';
 import Content from './Content';
-
-import * as constant from '../constants/AppConstants';
 
 
 //const selectedCandiateRef = React.createRef();
@@ -64,7 +60,6 @@ componentDidMount = async () => {
 
 loadContract = () => {
     const {
-        accounts,
         contract
     } = this.state;
     console.log("Loading Election Contract");
@@ -93,8 +88,8 @@ loadContract = () => {
             });
             contract.methods.voters(this.state.account).send({from :this.state.account},
             (err,result) => {
-                console.log(err);
-                console.log(result);
+                if (err) 
+                    throw err;
             })
         }
     }).catch(err => {
@@ -106,7 +101,6 @@ loadContract = () => {
 
 watchEvents = async () => {
     const {
-        accounts,
         contract
     } = this.state;
 
@@ -132,19 +126,18 @@ castVote(event) {
     event.preventDefault();
 
     const {
-        accounts,
         candidates,
         contract
     } = this.state;
 
 
     if (this.state.candidateName) {
-       let candidateId = candidates.filter(candidate => candidate.name == this.state.candidateName)[0].id;
+       let candidateId = candidates.filter(candidate => candidate.name === this.state.candidateName)[0].id;
         contract.methods.vote(
-            parseInt(parseInt(candidateId))
+            parseInt(candidateId)
         ).send({
             from: this.state.account,
-            gasPrice: Web3.utils.asciiToHex("0.03"),
+            gasPrice: Web3.utils.asciiToHex("0.001"),
             gas: 6721975,
          }).then((f) => {
             console.log(f);
@@ -159,10 +152,6 @@ castVote(event) {
     }
 }
       render(){
-        let candidates = null;
-        if(! this.state.loading){
-          candidates = this.state.candidates;
-        }
           return (
             <div className='row'>
             <div className='col-lg-12 text-center' >

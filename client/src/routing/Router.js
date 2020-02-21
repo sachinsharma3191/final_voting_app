@@ -1,4 +1,4 @@
-import React , {Component} from 'react';
+import React from 'react';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import Voting from '../components/Voting';
 import Results from '../components/Results';
