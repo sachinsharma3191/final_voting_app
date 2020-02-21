@@ -31,6 +31,7 @@ contract Election {
         addCandidate("Hillary Clinton");
         addCandidate("Tulsi Gabbard");
         addCandidate("Donald Trump");
+
     }
 
     function addCandidate (string  memory _name) private {
@@ -59,8 +60,7 @@ contract Election {
       Candidate[] memory lBids = new Candidate[](candidatesCount);
       for (uint i = 0; i < candidatesCount; i++) {
           Candidate memory candidate = candidates[i];
-          
-          Bids[i] = candidate;
+          lBids[i] = candidate;
       }
       return lBids;
     }

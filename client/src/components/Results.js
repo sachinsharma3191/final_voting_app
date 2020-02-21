@@ -76,7 +76,7 @@ class Results extends React.Component {
 
   render() {
     return (
-      <table class='table'>
+      <table className='table'>
         <thead>
           <tr>
             <th>Id</th>

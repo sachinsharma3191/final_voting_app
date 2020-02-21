@@ -87,11 +87,10 @@ loadContract = () => {
             this.setState({
                 candidates: candidates
             })
-            console.log("Candiates Info Loaded");
+            console.log("Candidates Info Loaded");
             this.setState({
                 loading: false
             });
-            console.log(this.state.account);
             contract.methods.voters(this.state.account).send({from :this.state.account},
             (err,result) => {
                 console.log(err);
