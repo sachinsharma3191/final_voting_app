@@ -50,7 +50,7 @@ componentDidMount = async () => {
             web3,
             accounts,
             contract: electionInstance,
-            account: accounts[9]
+            account: accounts[0]
         });
         this.loadContract();
     } catch (error) {
@@ -70,7 +70,7 @@ loadContract = () => {
     console.log("Loading Election Contract");
     //this.watchEvents();
     contract.methods.getCandidates().call().then((result, err) => {
-        console.log("Loading Candiadates Info");
+        console.log("Loading Candidates Info");
         if (typeof(err) === undefined) {
             alert("No candidates found");
         }
@@ -91,7 +91,8 @@ loadContract = () => {
             this.setState({
                 loading: false
             });
-            contract.methods.voters(this.state.account).send({},
+            console.log(this.state.account);
+            contract.methods.voters(this.state.account).send({from :this.state.account},
             (err,result) => {
                 console.log(err);
                 console.log(result);
@@ -149,8 +150,10 @@ castVote(event) {
          }).then((f) => {
             console.log(f);
             console.log("Votes casted");
+            alert("Vote casted")
         }).catch(e => {
             console.log(e);
+            alert("An Error Occured");
         });
     } else {
         alert("Kindly Select Candidates");

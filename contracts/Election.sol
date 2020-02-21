@@ -2,14 +2,13 @@ pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
 contract Election {
-    // Model a Candidate 
     struct Candidate {
         uint id;
         string name;
         uint voteCount;
     }
 
-    struct Voter  {
+    struct Voter {
         uint id;
         string name;
         bool voted;
@@ -29,38 +28,39 @@ contract Election {
     );
 
     constructor () public {
+        addCandidate("Hillary Clinton");
         addCandidate("Tulsi Gabbard");
         addCandidate("Donald Trump");
-        addCandidate("Hillary Clinton");
     }
 
     function addCandidate (string  memory _name) private {
-        candidatesCount ++;
         candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
+        candidatesCount++;
     }
 
     function vote (uint _candidateId) public {
         // require that they haven't voted before
-        require(!voters[msg.sender]);
+        //require(!voters[msg.sender]);
 
         // require a valid candidate
         require(_candidateId > 0 && _candidateId <= candidatesCount);
 
         // record that voter has voted
-        voters[msg.sender] = true;
+        //voters[msg.sender] = true;
 
         // update candidate vote Count
-        candidates[_candidateId].voteCount ++;
+        candidates[_candidateId].voteCount++;
 
         // trigger voted event
-        emit votedEvent(_candidateId);
+        //emit votedEvent(_candidateId);
     }
     
     function getCandidates() public view returns (Candidate[] memory){
       Candidate[] memory lBids = new Candidate[](candidatesCount);
       for (uint i = 0; i < candidatesCount; i++) {
           Candidate memory candidate = candidates[i];
-          lBids[i] = candidate;
+          
+          Bids[i] = candidate;
       }
       return lBids;
     }
