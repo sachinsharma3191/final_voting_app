@@ -1,67 +1,78 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
-contract Election {
-    struct Candidate {
-        uint id;
-        string name;
-        uint voteCount;
-    }
 
+contract VoterRegistration {
     struct Voter {
-        uint id;
-        string name;
+        address voterAddress;
+        uint user_id;
+        string first_name;
+        string last_name;
+        string ssn;
         bool voted;
-    }
-
-    // Store accounts that have voted
-    mapping(address => bool) public voters;
-    // Store Candidates
-    // Fetch Candidate
-    mapping(uint => Candidate) public candidates;
-    // Store Candidates Count
-    uint public candidatesCount;
-
-    // voted event
-    event votedEvent (
-        uint indexed _candidateId
-    );
-
-    constructor () public {
-        addCandidate("Hillary Clinton");
-        addCandidate("Tulsi Gabbard");
-        addCandidate("Donald Trump");
-
-    }
-
-    function addCandidate (string  memory _name) private {
-        candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
-        candidatesCount++;
-    }
-
-    function vote (uint _candidateId) public {
-        // require that they haven't voted before
-        //require(!voters[msg.sender]);
-
-        // require a valid candidate
-        require(_candidateId > 0 && _candidateId <= candidatesCount);
-
-        // record that voter has voted
-        //voters[msg.sender] = true;
-
-        // update candidate vote Count
-        candidates[_candidateId].voteCount++;
-
-        // trigger voted event
-        //emit votedEvent(_candidateId);
+        string username;
+        string password;
     }
     
-    function getCandidates() public view returns (Candidate[] memory){
-      Candidate[] memory lBids = new Candidate[](candidatesCount);
-      for (uint i = 0; i < candidatesCount; i++) {
-          Candidate memory candidate = candidates[i];
-          lBids[i] = candidate;
-      }
-      return lBids;
+    // Store Voters
+    // Fetch Voters
+    //mapping(uint  => Voter) 
+    Voter [] public voters;
+    // Store Voters Count
+    uint public count;
+    
+    constructor() public {
+        count = 0;
     }
+    
+    function register(string memory _first_name,string memory _last_name,string memory _ssn,string memory _username,string memory _password) public returns(Voter[] memory) {
+        Voter memory voter = Voter(msg.sender,count,_first_name,_last_name,_ssn,false,_username,_password);
+        voters[count] = voter ;
+        count++;
+        
+        Voter [] memory list = new Voter[](count);
+        
+        for(uint i=0; i < count; i++){
+            list[i] = voters[i];
+        }
+        return voters;
+    }
+    
+    function userVoted(uint  _user_id) public {
+        Voter storage voter = voters[_user_id];
+        voter.voted = true;
+    }
+    
+    function getVoterInformation(uint _user_id) public view returns (Voter memory) {
+        return voters[_user_id];
+    }
+    
+    
+    function login(string memory _username,string memory _password) public view returns (bool){
+        bool isValidVoter;
+        for(uint i =0; i < count; i++){
+            Voter storage voter = voters[i];
+            
+            if (keccak256(abi.encodePacked(voter.username)) == keccak256(abi.encodePacked(_username))) {
+                if (keccak256(abi.encodePacked(voter.password)) == keccak256(abi.encodePacked(_password))) {
+                    isValidVoter = true;
+                }
+            }
+            else {
+                isValidVoter = false;
+            }
+        }
+        return isValidVoter;
+    }
+
+    function getVoterList() public view returns (Voter[] memory){
+        Voter [] memory list = new Voter[](count);
+        
+        for(uint i=0; i < count; i++){
+            list[i] = voters[i];
+        }
+        return list;
+    }
+    
+    
 }

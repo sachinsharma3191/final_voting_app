@@ -1,10 +1,11 @@
-import React,{Component} from 'react';
+import React,{ Component } from "react";
 import * as constants from '../constants/AppConstants';
 import Web3 from 'web3';
 import VoterRegistrationContract from '../contracts/VoterRegistration.json';
 
 
-class VoterRegistration extends Component {
+
+class Login extends Component {
     constructor(props){
         super(props);
         
@@ -13,15 +14,12 @@ class VoterRegistration extends Component {
           accounts: null,
           contract: null,
           account: null,
-            first_name: '',
-            last_name: '',
             username : '',
             password: '',
-            ssn: '',
         }
-        
-        this.handleInputChage = this.handleInputChage.bind(this);
-        this.register = this.register.bind(this);
+
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.login = this.login.bind(this);
     }
 
     componentDidMount = async () => {
@@ -40,6 +38,8 @@ class VoterRegistration extends Component {
               VoterRegistrationContract.abi,
               deployedNetwork && deployedNetwork.address,
           );
+          console.log(electionInstance);
+          
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
           this.setState({  
@@ -59,44 +59,35 @@ class VoterRegistration extends Component {
         }
       };
 
-
-  
-
-    handleInputChage(event){
+      handleInputChange(event){
         let name = event.target.name;
         let val = event.target.value;
         this.setState({ [name] : val});
-    }   
+    }  
 
-    register(){
-        const {contract,accounts, first_name,last_name,ssn,password,username} = this.state;
-        const index = Math.floor(Math.random() * Math.floor(10));
-        console.log(index);
-        let account = accounts[index];
-    
-        contract.methods.register(
-            first_name,
-            last_name,
-            ssn,
+    login(){
+        const {account,contract,username,password} = this.state;
+        contract.methods.login(
             username,
             password
-      ).send({
+      ).call({
           from: account,
-          gasPrice: Web3.utils.asciiToHex("0.001"),
+          gasPrice: Web3.utils.asciiToHex("0.0001"),
           gas: 6721975,
        }).then((f) => {
           console.log(f);
-          console.log("User Registered");
+          console.log("User Validted");
 
-          contract.methods.getCount().call({
+          contract.methods.getList().call({
             from: account,
-          gasPrice: Web3.utils.asciiToHex("0.001"),
-          gas: 6721975
-          }).then(f => {
+            gasPrice: Web3.utils.asciiToHex("0.0001"),
+            gas: 6721975,
+         }).then((f) => {
             console.log(f);
-          }).catch(e => {
-            console.log(e);
-          });
+            console.log("User Validted");
+         }).catch(err => {
+            console.log(err);
+         });
           //alert("Vote casted")
       }).catch(e => {
           console.log(e);
@@ -105,55 +96,32 @@ class VoterRegistration extends Component {
     }
     
     render(){
-        return (
+        return(
             <div>
             <form>
-            <h1>Hello {this.state.username}</h1>
-            <p>Enter your First name:</p>
-            <input
-              type='text'
-              name='first_name'
-              value={this.state.first_name}
-              onChange={this.handleInputChage}
-            />
-            <p>Enter Last Name:</p>
-            <input
-              type='text'
-              name='last_name'
-              value={this.state.last_name}
-              onChange={this.handleInputChage}
-            />
-            <p>Enter username:</p>
+                 <p>Enter username:</p>
             <input
               type='text'
               name='username'
               value={this.state.username}
-              onChange={this.handleInputChage}
+              onChange={this.handleInputChange}
             />
             <p>Enter password:</p>
             <input
               type='password'
               name='password'
               value={this.state.password}
-              onChange={this.handleInputChage}
-            />
-            
-            <p>Enter Social Security Number</p>
-            <input
-              type='password'
-              name='ssn'
-              value={this.state.ssn}
-              onChange={this.handleInputChage}
+              onChange={this.handleInputChange}
             />
             </form>
             <button 
                 type = "submit" 
-                onClick = {this.register}> 
-              Submit
+                onClick = {this.login}> 
+              Login
               </button>
             </div>
         );
     }
 }
 
-export default VoterRegistration;
+export default Login;
