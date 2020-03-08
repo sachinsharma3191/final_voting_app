@@ -24,7 +24,7 @@ contract VoterRegistration {
         
     }
     
-    function voterRegistration(string memory _first_name,string memory _last_name,string memory _ssn,string memory _username,string memory _password) public{
+    function register(string memory _first_name,string memory _last_name,string memory _ssn,string memory _username,string memory _password) public{
         Voter memory voter = Voter(msg.sender,count,_first_name,_last_name,_ssn,false,_username,_password);
         voters[count] = voter;
         count++;

@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import * as constants from '../constants/AppConstants';
+import Web3 from 'web3';
 import VoterRegistrationContract from '../contracts/VoterRegistration.json';
 
 
@@ -8,7 +9,10 @@ class VoterRegistration extends Component {
         super(props);
         
         this.state = {
-            web3: null, contract: null,
+          web3: null,
+          accounts: null,
+          contract: null,
+          account: null,
             first_name: '',
             last_name: '',
             username : '',
@@ -17,7 +21,6 @@ class VoterRegistration extends Component {
         }
         
         this.handleInputChage = this.handleInputChage.bind(this);
-        this.loadContract = this.loadContract.bind(this);
         this.register = this.register.bind(this);
     }
 
@@ -26,6 +29,9 @@ class VoterRegistration extends Component {
           // Get network provider and web3 instance.
           const web3 = constants.WEB3;
     
+          // Use web3 to get the user's accounts.
+          const accounts = await web3.eth.getAccounts();
+        // Get the contract instance.
           // Get the contract instance.
           const networkId = await web3.eth.net.getId();
           const deployedNetwork = VoterRegistrationContract.networks[networkId];
@@ -38,8 +44,14 @@ class VoterRegistration extends Component {
           
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
-          this.setState({ web3, contract: electionInstance });
-          this.loadContract();
+          this.setState({  
+            web3,
+            accounts,
+            contract: electionInstance,
+            account: accounts[0]
+          });
+
+
         } catch (error) {
           // Catch any errors for any of the above operations.
           alert(
@@ -50,9 +62,7 @@ class VoterRegistration extends Component {
       };
 
 
-    loadContract(){
-
-    }
+  
 
     handleInputChage(event){
         let name = event.target.name;
@@ -61,7 +71,28 @@ class VoterRegistration extends Component {
     }   
 
     register(){
+        const {contract,account, first_name,last_name,ssn,password,username} = this.state;
 
+        console.log(contract.methods);
+        /*contract.methods.register(
+            first_name,
+            last_name,
+            ssn,
+            username,
+            password
+      ).send({
+          from: account,
+          gasPrice: Web3.utils.asciiToHex("0.001"),
+          gas: 6721975,
+       }).then((f) => {
+          console.log(f);
+          console.log("Votes casted");
+          //alert("Vote casted")
+      }).catch(e => {
+          console.log(e);
+          //alert("An Error Occured");
+      });*/
+      console.log(contract.voters)
     }
     
     render(){
@@ -106,6 +137,11 @@ class VoterRegistration extends Component {
               onChange={this.handleInputChage}
             />
             </form>
+            <button 
+                type = "submit" 
+                onClick = {this.register}> 
+              Submit
+              </button>
             </div>
         );
     }
