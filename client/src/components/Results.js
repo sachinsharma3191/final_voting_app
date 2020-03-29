@@ -50,7 +50,6 @@ class Results extends React.Component {
         if(typeof(err) === undefined){
           alert("No candidates found");
         }
-        console.log(result);
         if(result ){
           let candidates = []
             for(let candidate of result){

@@ -66,8 +66,6 @@ class Login extends Component {
 
     login(){
         const {account,contract,username,password} = this.state;
-        console.log(username)
-        console.log(password);
         contract.methods.login(username,password)
         .call({
           from: account,
@@ -75,8 +73,6 @@ class Login extends Component {
           gas: 6721975,
        }).then((f) => {
           console.log(f);
-          console.log("User Validated");
-          //alert("Vote casted")
       }).catch(e => {
           console.log(e);
       }); 

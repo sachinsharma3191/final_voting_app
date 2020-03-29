@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 
 
-contract VoterContract {
+contract VoterContract   {
     struct Voter {
         address voterAddress;
         uint user_id;
@@ -55,7 +55,6 @@ contract VoterContract {
     function login(string memory _username,string memory _password) public view returns (bool){
         for(uint i =0; i < count; i++){
             Voter storage voter = voters[i];
-            
             if (keccak256(abi.encodePacked(voter.username)) == keccak256(abi.encodePacked(_username))) {
                 if (keccak256(abi.encodePacked(voter.password)) == keccak256(abi.encodePacked(_password))) {
                     return true;
