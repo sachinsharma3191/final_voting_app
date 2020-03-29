@@ -1,19 +1,15 @@
 import React from 'react';
 import { Route, Switch, NavLink, BrowserRouter as Router } from 'react-router-dom';
-import Voting from '../components/Voting';
+import Election from '../components/Election';
 import Results from '../components/Results';
 import Home from '../components/Home';
-import VoterRegistration from '../components/VoterRegistration';
+import Registration from '../components/Registration';
 import Login  from '../components/Login';
 
 const Routing = () => {
-    const register = false;
     return (
     <Router>
         <div>
-        {
-            register ? <VoterRegistration/> : <Login/>
-        } 
             <ul>
                 <li><NavLink to="/">Home</NavLink></li>
                 <li><NavLink to="/voting">Voting</NavLink></li>
@@ -24,10 +20,10 @@ const Routing = () => {
             </ul>
             <Switch>
                 <Route exact path="/" component = {Home}/>
-                <Route path ="/voting" component = {Voting}/>
+                <Route path ="/voting" component = {Election}/>
                 <Route path = "/results" component={Results}/>
-                <Router path = "/register" component={VoterRegistration}/>
-                <Router path = "/login" component={Login}/>
+                <Route path = "/register" component={Registration}/>
+                <Route path = "/login" component={Login}/>
                 
             </Switch>
         </div>

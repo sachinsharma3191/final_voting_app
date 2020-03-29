@@ -1,78 +1,62 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.4.22 <0.7.0;
 pragma experimental ABIEncoderV2;
 
-
-contract VoterRegistration {
-    struct Voter {
-        address voterAddress;
-        uint user_id;
+contract Election  {
+    struct Candidate {
+        uint candidate_id;
         string first_name;
         string last_name;
         string ssn;
-        bool voted;
+        uint voteCount;
         string username;
         string password;
     }
     
-    // Store Voters
-    // Fetch Voters
-    //mapping(uint  => Voter) 
-    Voter [] public voters;
-    // Store Voters Count
+    struct ElectionResult  {
+        uint candidate_id;
+        string first_name;
+        string last_name; 
+        uint voteCount;
+    }
+
+    mapping(uint  => Candidate) public candidates;
+    // Store VoteArs Count
     uint public count;
     
     constructor() public {
-        count = 0;
+        addCandidate("Tulsi","Gabbard","","tulsi","tulsi@123");
+        addCandidate("Donald","Trump","","donald","trump@123");
+        addCandidate("Hillary","Clinton","","hillary","clinton@123");   
     }
     
-    function register(string memory _first_name,string memory _last_name,string memory _ssn,string memory _username,string memory _password) public returns(Voter[] memory) {
-        Voter memory voter = Voter(msg.sender,count,_first_name,_last_name,_ssn,false,_username,_password);
-        voters[count] = voter ;
+    function addCandidate(string memory _first_name,string memory _last_name,string memory _ssn,string memory _username,string memory _password) public{
+        Candidate memory candidate = Candidate(count,_first_name,_last_name,_ssn,0,_username,_password);
+        candidates[count] = candidate;
         count++;
-        
-        Voter [] memory list = new Voter[](count);
-        
-        for(uint i=0; i < count; i++){
-            list[i] = voters[i];
-        }
-        return voters;
     }
     
-    function userVoted(uint  _user_id) public {
-        Voter storage voter = voters[_user_id];
-        voter.voted = true;
-    }
-    
-    function getVoterInformation(uint _user_id) public view returns (Voter memory) {
-        return voters[_user_id];
-    }
-    
-    
-    function login(string memory _username,string memory _password) public view returns (bool){
-        bool isValidVoter;
-        for(uint i =0; i < count; i++){
-            Voter storage voter = voters[i];
-            
-            if (keccak256(abi.encodePacked(voter.username)) == keccak256(abi.encodePacked(_username))) {
-                if (keccak256(abi.encodePacked(voter.password)) == keccak256(abi.encodePacked(_password))) {
-                    isValidVoter = true;
-                }
-            }
-            else {
-                isValidVoter = false;
-            }
-        }
-        return isValidVoter;
+    function vote (uint _candidateId) public {
+        // update candidate vote Count
+        candidates[_candidateId].voteCount++;
+
+        // trigger voted event
+        //emit votedEvent(_candidateId);
     }
 
-    function getVoterList() public view returns (Voter[] memory){
-        Voter [] memory list = new Voter[](count);
-        
-        for(uint i=0; i < count; i++){
-            list[i] = voters[i];
-        }
-        return list;
+
+    function getCandidates() public view returns (Candidate[] memory){
+      Candidate[] memory candidateList = new Candidate[](count);
+      for (uint i = 0; i < count; i++) {
+          candidateList[i] = candidates[i];
+      }
+      return candidateList;
     }
     
-    
+    function getElectionResult() public view returns (ElectionResult[] memory) {
+        ElectionResult [] memory result = new ElectionResult[](count);
+        for(uint  i =0; i < count; i++){
+            result[i] = ElectionResult(candidates[i].candidate_id,candidates[i].first_name,candidates[i].last_name,candidates[i].voteCount);
+        }
+        return result;
+    }
 }

@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import * as constants from '../constants/AppConstants';
 import Web3 from 'web3';
-import VoterRegistrationContract from '../contracts/VoterRegistration.json';
+import VoterContract from '../contracts/VoterContract.json';
 
 
 class VoterRegistration extends Component {
@@ -19,7 +19,6 @@ class VoterRegistration extends Component {
             password: '',
             ssn: '',
         }
-        
         this.handleInputChage = this.handleInputChage.bind(this);
         this.register = this.register.bind(this);
     }
@@ -34,12 +33,13 @@ class VoterRegistration extends Component {
         // Get the contract instance.
           // Get the contract instance.
           const networkId = await web3.eth.net.getId();
-          const deployedNetwork = VoterRegistrationContract.networks[networkId];
+          const deployedNetwork = VoterContract.networks[networkId];
           
           const electionInstance = new web3.eth.Contract(
-              VoterRegistrationContract.abi,
+              VoterContract.abi,
               deployedNetwork && deployedNetwork.address,
           );
+          
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
           this.setState({  
@@ -70,10 +70,10 @@ class VoterRegistration extends Component {
 
     register(){
         const {contract,accounts, first_name,last_name,ssn,password,username} = this.state;
-        const index = Math.floor(Math.random() * Math.floor(10));
-        console.log(index);
-        let account = accounts[index];
+        let account = accounts[0];
     
+        console.log(contract.events)
+      
         contract.methods.register(
             first_name,
             last_name,
@@ -88,7 +88,7 @@ class VoterRegistration extends Component {
           console.log(f);
           console.log("User Registered");
 
-          contract.methods.getCount().call({
+          contract.methods.getVoterCount().call({
             from: account,
           gasPrice: Web3.utils.asciiToHex("0.001"),
           gas: 6721975
@@ -97,11 +97,11 @@ class VoterRegistration extends Component {
           }).catch(e => {
             console.log(e);
           });
-          //alert("Vote casted")
       }).catch(e => {
           console.log(e);
           //alert("An Error Occured");
       });
+
     }
     
     render(){

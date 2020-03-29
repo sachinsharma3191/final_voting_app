@@ -72,7 +72,7 @@ loadContract = () => {
         if (result) {
             let candidates = []
             for (let candidate of result) {
-                let keys = Object.keys(candidate).filter(key => key === "id" || key === "name" || key === "voteCount");
+                let keys = Object.keys(candidate).filter(key => key === "candidate_id" || key === "first_name" || key === "voteCount");
                 candidates.push({
                     id: candidate[keys[0]],
                     name: candidate[keys[1]],
@@ -86,11 +86,6 @@ loadContract = () => {
             this.setState({
                 loading: false
             });
-            contract.methods.voters(this.state.account).send({from :this.state.account},
-            (err,result) => {
-                if (err) 
-                    throw err;
-            })
         }
     }).catch(err => {
         console.log(err);

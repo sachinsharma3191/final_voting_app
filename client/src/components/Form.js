@@ -11,9 +11,9 @@ class Form extends React.Component {
     classes : null
   }
 
-  useStyles = () => {
-    return 
-    makeStyles(theme => ({
+
+  componentDidMount = async () => {
+    const classes =  makeStyles(theme => ({
       formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
@@ -22,10 +22,6 @@ class Form extends React.Component {
         marginTop: theme.spacing(2),
       },
     }));
-  }
-
-  componentDidMount = async () => {
-    const classes = this.useStyles();
      this.setState({
         classes : classes
      })

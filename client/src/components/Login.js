@@ -1,7 +1,7 @@
 import React,{ Component } from "react";
 import * as constants from '../constants/AppConstants';
 import Web3 from 'web3';
-import VoterRegistrationContract from '../contracts/VoterRegistration.json';
+import VoterRegistrationContract from '../contracts/VoterContract.json';
 
 
 
@@ -38,7 +38,6 @@ class Login extends Component {
               VoterRegistrationContract.abi,
               deployedNetwork && deployedNetwork.address,
           );
-          console.log(electionInstance);
           
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
@@ -63,36 +62,24 @@ class Login extends Component {
         let name = event.target.name;
         let val = event.target.value;
         this.setState({ [name] : val});
-    }  
+    }   
 
     login(){
         const {account,contract,username,password} = this.state;
-        contract.methods.login(
-            username,
-            password
-      ).call({
+        console.log(username)
+        console.log(password);
+        contract.methods.login(username,password)
+        .call({
           from: account,
           gasPrice: Web3.utils.asciiToHex("0.0001"),
           gas: 6721975,
        }).then((f) => {
           console.log(f);
-          console.log("User Validted");
-
-          contract.methods.getList().call({
-            from: account,
-            gasPrice: Web3.utils.asciiToHex("0.0001"),
-            gas: 6721975,
-         }).then((f) => {
-            console.log(f);
-            console.log("User Validted");
-         }).catch(err => {
-            console.log(err);
-         });
+          console.log("User Validated");
           //alert("Vote casted")
       }).catch(e => {
           console.log(e);
-          //alert("An Error Occured");
-      });
+      }); 
     }
     
     render(){

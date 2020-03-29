@@ -50,10 +50,11 @@ class Results extends React.Component {
         if(typeof(err) === undefined){
           alert("No candidates found");
         }
+        console.log(result);
         if(result ){
           let candidates = []
             for(let candidate of result){
-              let keys = Object.keys(candidate).filter(key => key === "id" || key === "name" || key ===  "voteCount");
+              let keys = Object.keys(candidate).filter(key => key === "candidate_id" || key === "first_name" || key ===  "voteCount");
               candidates.push({
                 id: candidate[keys[0]],
                 name: candidate[keys[1]],
