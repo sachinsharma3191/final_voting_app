@@ -62,6 +62,12 @@ class Login extends Component {
         let name = event.target.name;
         let val = event.target.value;
         this.setState({ [name] : val});
+
+       this.state.contract.methods.getVoterList().call().then(f => {
+        console.log(f);
+       }).catch(e => {
+         console.log(e);
+       });
     }   
 
     login(){
@@ -73,8 +79,10 @@ class Login extends Component {
           gas: 6721975,
        }).then((f) => {
           console.log(f);
+          alert(f === true ? "User Login Successful" : " Invalid Login Credentials");
       }).catch(e => {
           console.log(e);
+          alert(e);
       }); 
     }
     

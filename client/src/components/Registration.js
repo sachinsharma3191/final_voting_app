@@ -72,8 +72,6 @@ class VoterRegistration extends Component {
         const {contract,accounts, first_name,last_name,ssn,password,username} = this.state;
         let account = accounts[0];
     
-        console.log(contract.events)
-      
         contract.methods.register(
             first_name,
             last_name,
@@ -87,16 +85,6 @@ class VoterRegistration extends Component {
        }).then((f) => {
           console.log(f);
           console.log("User Registered");
-
-          contract.methods.getVoterCount().call({
-            from: account,
-          gasPrice: Web3.utils.asciiToHex("0.001"),
-          gas: 6721975
-          }).then(f => {
-            console.log(f);
-          }).catch(e => {
-            console.log(e);
-          });
       }).catch(e => {
           console.log(e);
           //alert("An Error Occured");
